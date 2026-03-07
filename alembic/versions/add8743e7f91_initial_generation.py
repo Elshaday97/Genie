@@ -1,8 +1,8 @@
-"""initial_schema
+"""initial generation
 
-Revision ID: c6ce9fec3a50
+Revision ID: add8743e7f91
 Revises:
-Create Date: 2026-02-22 14:08:08.167378
+Create Date: 2026-03-02 11:41:50.456780
 
 """
 
@@ -10,13 +10,14 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-import fastapi_users_db_sqlalchemy
+
 
 # revision identifiers, used by Alembic.
-revision: str = "c6ce9fec3a50"
+revision: str = "add8743e7f91"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
+import fastapi_users_db_sqlalchemy
 
 
 def upgrade() -> None:
@@ -26,8 +27,7 @@ def upgrade() -> None:
         "users",
         sa.Column("first_name", sa.String(length=50), nullable=False),
         sa.Column("last_name", sa.String(length=50), nullable=False),
-        sa.Column("user_name", sa.String(length=50), nullable=False),
-        sa.Column("email", sa.String(length=100), nullable=False),
+        sa.Column("username", sa.String(length=50), nullable=False),
         sa.Column("phone_number", sa.String(length=20), nullable=True),
         sa.Column(
             "status",
@@ -35,6 +35,7 @@ def upgrade() -> None:
             server_default="pending",
             nullable=False,
         ),
+        sa.Column("profile_image", sa.String(length=500), nullable=True),
         sa.Column(
             "tier",
             sa.Enum("free", "silver", "gold", "diamond", name="usertierenum"),
@@ -60,6 +61,7 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.Column("id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
+        sa.Column("email", sa.String(length=320), nullable=False),
         sa.Column("hashed_password", sa.String(length=1024), nullable=False),
         sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.Column("is_superuser", sa.Boolean(), nullable=False),
@@ -67,13 +69,13 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id", name=op.f("pk_users")),
         sa.UniqueConstraint("email", name="uq_user_email"),
         sa.UniqueConstraint("phone_number", name="uq_user_phone"),
-        sa.UniqueConstraint("user_name", name="uq_user_username"),
+        sa.UniqueConstraint("username", name="uq_user_username"),
     )
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=True)
     op.create_index(
         op.f("ix_users_phone_number"), "users", ["phone_number"], unique=True
     )
-    op.create_index(op.f("ix_users_user_name"), "users", ["user_name"], unique=True)
+    op.create_index(op.f("ix_users_username"), "users", ["username"], unique=True)
     op.create_table(
         "oauth_accounts",
         sa.Column(
@@ -115,7 +117,7 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_oauth_accounts_oauth_name"), table_name="oauth_accounts")
     op.drop_index(op.f("ix_oauth_accounts_account_id"), table_name="oauth_accounts")
     op.drop_table("oauth_accounts")
-    op.drop_index(op.f("ix_users_user_name"), table_name="users")
+    op.drop_index(op.f("ix_users_username"), table_name="users")
     op.drop_index(op.f("ix_users_phone_number"), table_name="users")
     op.drop_index(op.f("ix_users_email"), table_name="users")
     op.drop_table("users")

@@ -58,7 +58,7 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
 
-    app.include_router(api_router, prefix="/api/v1")
+    app.include_router(api_router, prefix=config.API_V1_STR)
 
     # Basic liveness check
     @app.get("/health", tags=["Health"], status_code=status.HTTP_200_OK)

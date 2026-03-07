@@ -3,19 +3,22 @@ from typing import Annotated
 from pydantic import AfterValidator
 
 
-def validate_phone(cls, v: str) -> str:
-    if v is None:
-        return v
+import phonenumbers
+from typing import Annotated
+from pydantic import AfterValidator
 
+
+def validate_phone(v: str) -> str:
     try:
         pn = phonenumbers.parse(v, None)
 
         if not phonenumbers.is_valid_number(pn):
-            raise ValueError("Invalid Phone Number Format")
+            raise ValueError("Invalid phone number format")
 
         return phonenumbers.format_number(pn, phonenumbers.PhoneNumberFormat.E164)
-    except Exception:
-        raise ValueError("Phone number must include country code")
+
+    except phonenumbers.NumberParseException as e:
+        raise ValueError(f"Invalid phone number format: {e}")
 
 
 PhoneNumber = Annotated[str, AfterValidator(validate_phone)]

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from .model import User
-from .schema import UserCreate, UserUpdate
+from .schema import UserCreate
 from uuid import UUID
 
 
@@ -23,3 +24,10 @@ class UserRepository:
     def delete(self, db_user: User) -> None:
         self.db.delete(db_user)
         return True
+
+    def get_by_username(self, username: str) -> User | None:
+        return (
+            self.db.query(User)
+            .filter(or_(User.username == username, User.email == username))
+            .first()
+        )
