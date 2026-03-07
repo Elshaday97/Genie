@@ -8,6 +8,7 @@ from alembic import context
 from app.core.config import config as settings
 from app.db.session import Base
 from app.users.model import User, OAuthAccount
+from app.auth.model import OTPTracking
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

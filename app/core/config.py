@@ -19,7 +19,12 @@ class Config(BaseSettings):
     APP_PORT: str
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    REFRESH_TOKEN_EXPIRE_DAYS: int
+    TWILIO_ACCOUNT_SID: str
+    TWILIO_AUTH_TOKEN: str
+    TWILIO_VERIFY_SERVICE_SID: str
+    OTP_VALIDITY_SECONDS: int
 
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True)
 

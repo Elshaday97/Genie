@@ -1,0 +1,6 @@
+AUTH_ROUTE_PREFIX = "/auth"
+AUTH_ROUTE_TAG = ["Auth"]
+
+
+OTP_ROUTE_PREFIX = "/otp"
+OTP_ROUTE_TAG = ["Otp"]

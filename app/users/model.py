@@ -26,25 +26,20 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     __tablename__ = "users"
     __table_args__ = (
         UniqueConstraint("email", name=UQ_USER_EMAIL),
-        UniqueConstraint("user_name", name=UQ_USER_USERNAME),
+        UniqueConstraint("username", name=UQ_USER_USERNAME),
         UniqueConstraint("phone_number", name=UQ_USER_PHONE),
     )
 
     # Personal Information
     first_name: Mapped[str] = mapped_column(String(50), nullable=False)
     last_name: Mapped[str] = mapped_column(String(50), nullable=False)
-    user_name: Mapped[str] = mapped_column(
+    username: Mapped[str] = mapped_column(
         String(50), unique=True, index=True, nullable=False
     )
 
     # Auth Fields
-    email: Mapped[str] = mapped_column(
-        String(100), unique=True, index=True, nullable=False
-    )
-
-    phone_number: Mapped[Optional[str]] = mapped_column(
-        String(20), unique=True, index=True
-    )
+    phone_number: Mapped[str] = mapped_column(String(20), unique=True, index=True)
+    hashed_password: Mapped[Optional[str]] = mapped_column(String(1024), nullable=True)
 
     status: Mapped[UserStatusEnum] = mapped_column(
         Enum(
@@ -55,6 +50,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         default=UserStatusEnum.PENDING.value,  # Python Default
         server_default=UserStatusEnum.PENDING.value,  # Database Default
     )
+
+    profile_image: Mapped[str] = mapped_column(String(500), nullable=True)
 
     # Subscription & App Logic
     tier: Mapped[UserTierEnum] = mapped_column(
