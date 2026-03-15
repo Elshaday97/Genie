@@ -75,6 +75,18 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         cascade="all, delete-orphan",
     )
 
+    owned_groups: Mapped[List["FamilyGroup"]] = relationship(
+        "FamilyGroup",
+        back_populates="owner",
+        cascade="all, delete-orphan",
+    )
+
+    family_groups: Mapped[List["FamilyGroup"]] = relationship(
+        "FamilyGroup",
+        secondary="family_group_members",
+        back_populates="members",
+    )
+
     # Timestamps
     created_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

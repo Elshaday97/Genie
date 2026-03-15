@@ -59,6 +59,10 @@ class UserService:
 
     def delete_user(self, user_id: UUID):
         db_user = self.get_user_by_id(user_id)
+        if not db_user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+            )
         try:
             self.repository.delete(db_user)
             self.db.commit()

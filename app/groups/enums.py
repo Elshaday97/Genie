@@ -6,3 +6,8 @@ class GroupRoleEnum(str, Enum):
     ADMIN = "admin"
     EDITOR = "editor"
     VIEWER = "viewer"
+
+
+class FamilyGroupStatusEnum(str, Enum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
