@@ -1,7 +1,6 @@
 from fastapi import Form
 from pydantic import BaseModel, Field
 from .enums import TokenTypesEnum
-from typing import Optional
 from app.utils.validators import PhoneNumber
 
 
